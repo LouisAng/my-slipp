@@ -8,11 +8,11 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" >
 
-    <title>Hello, world!</title>
+    <title>Hello, world! template</title>
   </head>
   <body>
 	  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	  <a class="navbar-brand" href="index.html">Slipp</a>
+	  <a class="navbar-brand" href="/index.html">Slipp</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
@@ -30,29 +30,29 @@
 	    </form>
 	  </div>
 	</nav>
-	 
-	<div class="container">
-		<form action="/create" method="post">
-		  <div class="form-group">
-		    <label for="userId">사용자 아이디</label>
-		    <input type="text" class="form-control" name="userId" placeholder="사용자 아이디">
-		  </div>
-		  <div class="form-group">
-		    <label for="password">비밀번호</label>
-		    <input type="password" class="form-control" name="password" placeholder="비밀번호">
-		  </div>
-		  <div class="form-group">
-		    <label for="name">이름</label>
-		    <input type="text" class="form-control" name="name" placeholder="이름">
-		  </div>
-		  <div class="form-group">
-		    <label for="name">이메일</label>
-		    <input type="email" class="form-control" name="email" placeholder="이메일">
-		  </div>
-		  <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-	</div>
 	
+	<div class="container">
+		<table class="table table-condensed">
+			<caption>사용자 목록</caption>
+			<thead>
+				<tr>
+					<th>사용자 아이디</th>
+					<th>이름</th>
+					<th>이메일</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#users}}
+				<tr>
+					<td scope="row">{{userId}}</td>
+					<td>{{name}}</td>
+					<td>{{email}}</td>
+				</tr>
+				{{/users}}
+			</tbody>
+		</table>
+	</div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="/webjars/jquery/3.4.1/dist/jquery.min.js" ></script>
