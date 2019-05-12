@@ -29,6 +29,13 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public boolean matchPassword(String newPassword) {
+		if (newPassword == null) {
+			return false;
+		}
+		
+		return newPassword.equals(password);
+	}
 	public String getName() {
 		return name;
 	}
