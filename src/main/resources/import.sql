@@ -1,1 +1,2 @@
-INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL) VALUES (0, 'ramovi', 'test', '안경모', 'ramovitabella@gmail.com')
+INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL) VALUES (1, 'ramovi', 'test', '안경모', 'ramovitabella@gmail.com')
+INSERT INTO USER (ID, USER_ID, PASSWORD, NAME, EMAIL) VALUES (2, 'ramovi2', 'test', '안경모2', 'ramovitabella@gmail.com')

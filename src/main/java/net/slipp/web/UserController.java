@@ -21,71 +21,95 @@ import net.slipp.domain.UserRepository;
 @RequestMapping("/users")
 public class UserController {
 	private List<User> users = new ArrayList<User>();
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@GetMapping("/loginForm")
 	public String loginForm() {
 		return "/user/login";
 	}
-	
+
 	@PostMapping("/login")
 	public String login(String userId, String password, HttpSession session) {
 		User user = userRepository.findByUserId(userId);
-		
+
 		if (user == null) {
 			System.out.println("Login Failue!");
 			return "redirect:/users/loginForm";
 		}
-		
+
 		if (!user.matchPassword(password)) {
 			System.out.println("login Failue!");
 			return "redirect:/users/loginForm";
 		}
-		
-		session.setAttribute("user", user);
-		
+
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("user");
-		
+		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/form")
 	public String form() {
 		return "/user/form";
 	}
-	
+
 	@PostMapping("")
 	public String create(User user) {
 		System.out.println(user.toString());
 		userRepository.save(user);
-		
+
 		return "redirect:/users";
 	}
-	
+
 	@GetMapping("")
 	public String list(Model model) {
 		model.addAttribute("users", userRepository.findAll());
-		
+
 		return "/user/list";
 	}
-	
+
 	@GetMapping("/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model) {
-		model.addAttribute("user", userRepository.findById(id).get());
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+
+		if (HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}
+
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+		if (!sessionedUser.matchId(id)) {
+			throw new IllegalStateException("You can't update other users.");
+		}
+
+		User user = userRepository.findById(id).get();
+
+		model.addAttribute("user", user);
 		return "/user/updateForm";
 	}
 
 	@PutMapping("/{id}")
-	public String update(@PathVariable Long id, User newUser) {
+	public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+
+		if (HttpSessionUtils.isLoginUser(session)) {
+			return "redirect:/users/loginForm";
+		}
+
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+		if (!sessionedUser.matchId(id)) {
+			throw new IllegalStateException("You can't update other users.");
+		}
+
 		User user = userRepository.findById(id).get();
-		user.update(newUser);
+		user.update(updatedUser);
 		userRepository.save(user);
 		return "redirect:/users";
 	}
